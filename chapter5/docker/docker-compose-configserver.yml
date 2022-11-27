@@ -1,0 +1,28 @@
+version: '2.1'
+services:
+  configserver:
+    image: ostock/configserver:0.0.1-SNAPSHOT
+    ports:
+       - "8071:8071"
+    environment:
+      SPRING_PROFILES_ACTIVE: vault
+      ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
+      #    props for vault configs:
+#      spring:
+#        cloud:
+#          config:
+#            server:
+#              vault:
+#      SPRING_CLOUD_CONFIG_SERVER_VAULT_PORT: 8200
+      SPRING_CLOUD_CONFIG_SERVER_VAULT_HOST: vault
+      SPRING_CLOUD_CONFIG_SERVER_VAULT_BACKEND: "test"
+#      SPRING_CLOUD_CONFIG_SERVER_VAULT_DEFAULTKEY: ""
+#      SPRING_CLOUD_CONFIG_SERVER_VAULT_KVVERSION: 1
+    networks:
+      backend:
+        aliases:
+          - "configserver"
+
+networks:
+  backend:
+    driver: bridge

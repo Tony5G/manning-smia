@@ -13,6 +13,11 @@ spring:
         git:
           uri: https://github.com/ihuaylupo/config.git
 #          searchPaths: licensing-service
+        vault:
+          host: 127.0.0.1
+          port: 8200
+          kv-version: 2
+#          backend:
 
 server:
   port: 8071

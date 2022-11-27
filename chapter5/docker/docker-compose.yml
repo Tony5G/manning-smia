@@ -11,68 +11,72 @@ services:
       backend:
         aliases:
           - "vault"
-  database:
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB:       "ostock_dev"
-    volumes:
-        - ./init.sql:/docker-entrypoint-initdb.d/1-init.sql
-        - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
-    networks:
-      backend:
-        aliases:
-          - "database"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-  configserver:
-    image: ostock/configserver:0.0.1-SNAPSHOT
-    ports:
-       - "8071:8071"
-    environment:
-      SPRING_PROFILES_ACTIVE: git
-      ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
-    networks:
-      backend:
-        aliases:
-          - "configserver"
-  licensingservice:
-    image: ostock/licensing-service:0.0.2-SNAPSHOT
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-      CONFIGSERVER_URI: "http://configserver:8071"
-      CONFIGSERVER_PORT:   "8071"
-      DATABASESERVER_PORT: "5432"
-      ENCRYPT_KEY:       "IMSYMMETRIC"
-    depends_on:
-      database:
-        condition: service_healthy
-      configserver:
-        condition: service_started
-    ports:
-      - "8080:8080"
-    networks:
-      backend:
-        aliases:
-          - "licensingservice"
-  pg-admin:
-    image: dpage/pgadmin4
-    environment:
-#      PGADMIN_LISTEN_PORT: 5432
-      PGADMIN_DEFAULT_EMAIL: postgres@mail.ru
-      PGADMIN_DEFAULT_PASSWORD: postgres
-    ports:
-      - "8085:80"
-    networks:
-      backend:
-        aliases:
-          - "pg-admin"
+#  database:
+#    image: postgres:latest
+#    ports:
+#      - "5432:5432"
+#    environment:
+#      POSTGRES_USER: "postgres"
+#      POSTGRES_PASSWORD: "postgres"
+#      POSTGRES_DB:       "ostock_dev"
+#    volumes:
+#        - ./init.sql:/docker-entrypoint-initdb.d/1-init.sql
+#        - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
+#    networks:
+#      backend:
+#        aliases:
+#          - "database"
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U postgres"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#  configserver:
+#    image: ostock/configserver:0.0.1-SNAPSHOT
+#    ports:
+#       - "8071:8071"
+#    environment:
+#      SPRING_PROFILES_ACTIVE: native
+#      ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
+#      #    props for vault configs:
+#      CONFIGSERVER_VAULT_PORT: 8200
+#      CONFIGSERVER_VAULT_HOST: vault
+#      CONFIGSERVER_VAULT_KVVERSION: 2
+#    networks:
+#      backend:
+#        aliases:
+#          - "configserver"
+#  licensingservice:
+#    image: ostock/licensing-service:0.0.2-SNAPSHOT
+#    environment:
+#      SPRING_PROFILES_ACTIVE: dev
+#      CONFIGSERVER_URI: "http://configserver:8071"
+#      CONFIGSERVER_PORT:   "8071"
+#      DATABASESERVER_PORT: "5432"
+#      ENCRYPT_KEY:       "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
+#    depends_on:
+#      database:
+#        condition: service_healthy
+#      configserver:
+#        condition: service_started
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      backend:
+#        aliases:
+#          - "licensingservice"
+#  pg-admin:
+#    image: dpage/pgadmin4
+#    environment:
+##      PGADMIN_LISTEN_PORT: 5432
+#      PGADMIN_DEFAULT_EMAIL: postgres@mail.ru
+#      PGADMIN_DEFAULT_PASSWORD: postgres
+#    ports:
+#      - "8085:80"
+#    networks:
+#      backend:
+#        aliases:
+#          - "pg-admin"
 
 networks:
   backend:
